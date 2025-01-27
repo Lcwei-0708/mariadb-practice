@@ -1,0 +1,56 @@
+services:
+  db:
+    image: mariadb:10-focal
+    container_name: mariadb
+    command: bash ./init.sh
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_USER=${DB_USER}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - ./test_db:/test_db:ro
+      - ./init.sh:/init.sh
+      - db-data:/var/lib/mysql
+    networks:
+      - backnet
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+
+  # init:
+  #   image: mariadb:10-focal
+  #   volumes:
+  #     - ./test_db:/test_db:ro
+  #   command: >
+  #     bash -c "until mysql -h db -u root -p${DB_PASSWORD} -e 'SELECT 1'; do sleep 5; done;
+  #     mysql -h db -u root -p${DB_PASSWORD} < /test_db/employees.sql"
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   networks:
+  #     - backnet
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - backnet
+      
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  backnet:
+    driver: bridge
