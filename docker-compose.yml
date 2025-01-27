@@ -4,9 +4,9 @@ services:
     container_name: mariadb
     command: bash ./init.sh
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-123456}
+      - MYSQL_USER=${DB_USER:-root}
       - MYSQL_ROOT_HOST=%
-      - MYSQL_USER=${DB_USER}
     ports:
       - "${DB_PORT:-3306}:3306"
     volumes:
@@ -21,19 +21,6 @@ services:
       timeout: 30s
       retries: 5
 
-  # init:
-  #   image: mariadb:10-focal
-  #   volumes:
-  #     - ./test_db:/test_db:ro
-  #   command: >
-  #     bash -c "until mysql -h db -u root -p${DB_PASSWORD} -e 'SELECT 1'; do sleep 5; done;
-  #     mysql -h db -u root -p${DB_PASSWORD} < /test_db/employees.sql"
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
-  #   networks:
-  #     - backnet
-
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
@@ -41,7 +28,7 @@ services:
     environment:
       PMA_HOST: db
       PMA_USER: root
-      PMA_PASSWORD: ${DB_PASSWORD}
+      PMA_PASSWORD: ${DB_PASSWORD:-123456}
     depends_on:
       - db
     networks:
