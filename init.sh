@@ -9,15 +9,14 @@ docker-entrypoint.sh mysqld &
 
 # 等待 MySQL 服務就緒
 echo "等待 MySQL 服務就緒..."
-until mysqladmin ping -h localhost -u"root" -p"${MYSQL_ROOT_PASSWORD}" --silent; do
+until mysqladmin ping -h db -u"root" -p"${MYSQL_ROOT_PASSWORD}" --silent; do
     echo "等待中..."
     sleep 5  # 增加等待時間
 done
 
 # 設定 root 使用者權限
-mysql -u"root" -p"${MYSQL_ROOT_PASSWORD}" <<-EOSQL
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
-    GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+mysql -h db -u"root" -p"${MYSQL_ROOT_PASSWORD}" <<-EOSQL
+    ALTER USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
     GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
     FLUSH PRIVILEGES;
 EOSQL

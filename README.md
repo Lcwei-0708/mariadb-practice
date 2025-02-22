@@ -39,9 +39,14 @@
    cp .env.example .env
    ```
    編輯 `.env` 文件設定：
-   - DB_PASSWORD：資料庫密碼（預設 123456）
-   - DB_PORT：連接埠（預設 3306）
-   - DB_USER： 帳號（預設 root）
+   - 資料庫相關
+      - DB_PASSWORD：資料庫密碼（預設 123456）
+      - DB_PORT：連接埠（預設 3306）
+      - DB_USER： 帳號（預設 root）
+   - 前端相關
+      - FRONTEND_PORT： 連接埠（預設 3000）
+   - 後端相關
+      - BACKEND_PORT： 連接埠（預設 5000）
 
 ### 3. 啟動環境
    ```bash
@@ -52,13 +57,13 @@
    - **MariaDB**
      - 主機：localhost
      - 連接埠：3306（可在 .env 中修改）
-     - 帳號：root
-     - 密碼：您設定的 DB_PASSWORD
+     - 帳號：root（可在 .env 中修改）
+     - 密碼：您設定的 DB_PASSWORD（可在 .env 中修改）
 
    - **phpMyAdmin**
      - 網址：http://localhost:8080
-     - 帳號：root
-     - 密碼：您設定的 DB_PASSWORD
+     - 帳號：root（可在 .env 中修改）
+     - 密碼：您設定的 DB_PASSWORD（可在 .env 中修改）
 
 ## 重新建立資料庫
 如果需要重新建立資料庫，請依照以下步驟操作：

@@ -70,10 +70,13 @@ docker-compose.override.yml
 *.tar
 *.zip
 
-# 數據庫
+# 資料庫
 *.sqlite
 *.sqlite3
 *.db
+
+# Python
+__pycache__/
 
 # 編譯文件
 *.com
